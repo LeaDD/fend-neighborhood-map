@@ -1,0 +1,30 @@
+{
+  "name": "fend-neighborhood-map",
+  "version": "1.0.0",
+  "description": "Udacity Frontend Web Dev Neighborhood Map Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeaDD/fend-neighborhood-map.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LeaDD/fend-neighborhood-map/issues"
+  },
+  "homepage": "https://github.com/LeaDD/fend-neighborhood-map#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-clean": "^1.1.0",
+    "grunt-contrib-cssmin": "^2.2.0",
+    "grunt-contrib-htmlmin": "^2.4.0",
+    "grunt-contrib-imagemin": "^2.0.1",
+    "grunt-contrib-jshint": "^1.1.0",
+    "grunt-contrib-uglify": "^3.0.1",
+    "grunt-responsive-images": "^1.10.1",
+    "load-grunt-tasks": "^3.5.2"
+  }
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta name='viewport' content='width=device-width, intial-scale=1'>
+        <meta name='author' content='David Deal'>
+        <meta name="description" content="Udacity Frontend Web Dev Neigborhood Map Project">
+
+        <!--jQuery-->
+        <script
+          src="https://code.jquery.com/jquery-3.2.1.min.js"
+          integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+          crossorigin="anonymous">
+        </script>
+
+        <!--Bootstrap-->
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+        <title>Neighborhood Map</title>
+
+        <style type="text/css">
+            #select-box {
+                height: 100%;
+                border-style: solid;
+                border-width: 3px;
+                border-color: blue;
+                color: red;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class='container-fluid'>
+            <div class='row'>
+                <div class='col-md-3' id='select-box'>
+                    <h3>TEST</h3>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!--knockout.js-->
+        <script async src='lib/knockout-3.4.2.js'></script>
+
+        <!--Google maps-->
+        <script async defer
+            src="https://maps.googleapis.com/maps/api/js?libraries=places,drawing,geometry&key=AIzaSyBvuITrVNeJb2d-iitT0s_ulfw8kc-CQJM&v=3&callback=initMap">
+        </script>
+    </body>
+</html>
