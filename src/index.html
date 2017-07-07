@@ -30,6 +30,7 @@
 
             body {
                 background-size: 100%;
+                background-color: darkseagreen;
             }
 
             html, body, .container-fluid {
@@ -41,10 +42,7 @@
             }
 
             #select-box {
-                border-style: solid;
-                border-width: 3px;
-                border-color: blue;
-                color: red;
+
             }
 
             #banner {
@@ -73,6 +71,11 @@
             <div class='row' id='map-block'>
                 <div class='col-xs-3' id='select-box'>
                     <h3>TEST</h3>
+                    <ul data-bind='foreach: locList'>
+                        <li>
+                            <span data-bind='text: title'></span>
+                        </li>
+                    </ul>
                 </div>
                 <div class='col-xs-9' id='map'>
 
@@ -81,12 +84,11 @@
 
         </div>
 
+        <!--knockout.js-->
+        <script async type="text/javascript" src='lib/knockout-3.4.2.js'></script>
 
         <!--The app-->
         <script type="text/javascript" src='js/app.js'></script>
-
-        <!--knockout.js-->
-        <script async src='lib/knockout-3.4.2.js'></script>
 
         <!--Google maps-->
         <script async defer
