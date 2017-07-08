@@ -5,7 +5,7 @@ var locations = [
     {title: 'Mockingbird Nature Park', location: {lat:32.4980242,lng:-96.96453369999999}},
     {title: 'Big Cigar Racing', location: {lat:32.5052189,lng:-96.91816799999999}},
     {title: 'Midlothian Heritage High School', location: {lat:32.4846421,lng:-96.9440862}}
-]
+];
 
 var ViewModel = function() {
     //Forces the content to stay within the viewmodel
@@ -21,7 +21,7 @@ var ViewModel = function() {
     });
 
     this.currentLoc = ko.observable(this.locList()[0]);
-}
+};
 
 //Variable to hold the map
 var map;

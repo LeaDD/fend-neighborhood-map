@@ -23,7 +23,7 @@ module.exports = function(grunt) {
             dist: {
                 files: [{
                     'dist/js/app.js': 'src/js/app.js',
-                    'dist/lib/knockout-3.42.2js': 'src/lib/knockout-3.4.2.js'
+                    'dist/lib/knockout-3.4.2.js': 'src/lib/knockout-3.4.2.js'
                 }]
             }
         },
