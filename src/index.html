@@ -49,6 +49,7 @@
                 height: 4%;
                 text-align: right;
                 text-shadow: 4px 4px 2px rgba(150, 150, 150, 1);
+                color: darkslateblue;
             }
 
             #map-block {
@@ -61,21 +62,33 @@
                 height: 100%;
             }
 
+            .list-head {
+                text-align: center;
+            }
+
+            #search-box {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
         </style>
     </head>
     <body>
         <div class='container-fluid'>
             <div class='row' id='banner'>
                 <div class='col-xs-12'>
-                    <h3>Darth Midlo's Happy Habitat</h3>
+                    <h1>Darth Midlo's Happy Habitat</h1>
                 </div>
             </div>
             <div class='row' id='map-block'>
                 <div class='col-xs-3' id='select-box'>
-                    <h3>TEST</h3>
+                    <h3 class='list-head'>Things to Do & Places to Go</h3>
+
+                    <input id='search-box' type='search' placeholder='Type here to filter the list'>
+
                     <ul data-bind='foreach: locList'>
                         <li>
-                            <span data-bind='text: title'></span>
+                            <p data-bind='text: title'></p>
                         </li>
                     </ul>
                 </div>

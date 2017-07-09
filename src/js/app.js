@@ -8,36 +8,23 @@ var locations = [
 ];
 
 //Variable to hold the map
-var map;
 
-function initMap() {
-
-    map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 32.482361, lng: -96.994448899999},
-        zoom: 13,
-        mapTypeControl: true
-    });
-
-}
 
 var ViewModel = function() {
 
-    var largeInfoWindow = new google.maps.InfoWindow();
     //Forces the content to stay within the viewmodel
     var that = this;
 
     //This will hold the objects in the locations array. The observable array will
     //automatically update any bound DOM elements whenever the array changes.
-    this.locList = ko.observableArray([]);
+    this.locList = ko.observableArray(locations);
+
+    //Intialize the current location
+    this.currentLoc = ko.observable(this.locList()[0]);
 
     var markers = [];
     //Style the markers a bit
     //var defaultIcon = makeMarkerIcon('0091ff');
-
-    //Push the locations objects to the observable array.
-    locations.forEach(function(loc) {
-        that.locList.push(loc);
-    });
 
 
     for(var i = 0; i < this.locList().length; i++) {
@@ -57,13 +44,30 @@ var ViewModel = function() {
         markers.push(marker);
     }
 
-    for (var j = 0; j < markers.length; j++) {
-        console.log(markers[j]);
+    function showMarkers() {
+        var bounds = new google.maps.LatLngBounds();
+
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(map);
+            //Extend the boundaries of the map to show all markers
+            bounds.extend(markers[i].position);
+        }
+        map.fitBounds(bounds);
     }
 
-
-    this.currentLoc = ko.observable(this.locList()[0]);
+    showMarkers();
 };
 
+var map;
 
-ko.applyBindings(new ViewModel());
+function initMap() {
+
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 32.482361, lng: -96.994448899999},
+        zoom: 13,
+        mapTypeControl: true
+    });
+
+    ko.applyBindings(new ViewModel());
+}
+
