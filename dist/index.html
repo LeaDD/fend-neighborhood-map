@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="author" content="David Deal"><meta name="description" content="Udacity Frontend Web Dev Neigborhood Map Project"><script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><title>Neighborhood Map</title><style type="text/css">* {
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="author" content="David Deal"><meta name="description" content="Udacity Frontend Web Dev Neigborhood Map Project"><script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><title>Darth Midlo's Neighborhood</title><style type="text/css">* {
                 -webkit-box-sizing: border-box;
                 -moz-box-sizing: border-box;
                 -ms-box-sizing: border-box;
@@ -7,7 +7,7 @@
 
             body {
                 background-size: 100%;
-                background-color: papayawhip;
+                background-color: gainsboro;
             }
 
             html, body, .container-fluid {
@@ -24,7 +24,9 @@
 
             #banner {
                 height: 4%;
-                text-align: center;
+                text-align: right;
+                text-shadow: 4px 4px 2px rgba(150, 150, 150, 1);
+                color: darkslateblue;
             }
 
             #map-block {
@@ -33,6 +35,15 @@
                 margin-bottom: 0px;
             }
 
-            #map, #select-box {
+            #map {
                 height: 100%;
-            }</style></head><body><div class="container-fluid"><div class="row" id="banner"><div class="col-xs-12"><h3>THIS IS THE HEAD SECTION</h3></div></div><div class="row" id="map-block"><div class="col-xs-3" id="select-box"><h3>TEST</h3><ul data-bind="foreach: locList"><li><span data-bind="text: title"></span></li></ul></div><div class="col-xs-9" id="map"></div></div></div><script async type="text/javascript" src="lib/knockout-3.4.2.js"></script><script type="text/javascript" src="js/app.js"></script><script async defer="defer" src="https://maps.googleapis.com/maps/api/js?libraries=places,drawing,geometry&key=AIzaSyBvuITrVNeJb2d-iitT0s_ulfw8kc-CQJM&v=3&callback=initMap"></script></body></html>
+            }
+
+            .list-head {
+                text-align: center;
+            }
+
+            #search-box {
+                width: 100%;
+                margin-bottom: 10px;
+            }</style></head><body><div class="container-fluid"><div class="row" id="banner"><div class="col-xs-12"><h1>Darth Midlo's Happy Habitat</h1></div></div><div class="row" id="map-block"><div class="col-sm-3" id="select-box"><h3 class="list-head">Things to Do & Places to Go</h3><input id="search-box" data-bind="value: selectLoc" type="search" placeholder="Type here to filter the list"><ul data-bind="foreach: filteredItems"><li><p data-bind="text: title"></p></li></ul></div><div class="col-sm-9" id="map"></div></div></div><script async type="text/javascript" src="lib/knockout-3.4.2.js"></script><script type="text/javascript" src="js/app.js"></script><script async defer="defer" src="https://maps.googleapis.com/maps/api/js?libraries=places,drawing,geometry&key=AIzaSyBvuITrVNeJb2d-iitT0s_ulfw8kc-CQJM&v=3&callback=initMap"></script></body></html>

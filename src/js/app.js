@@ -7,8 +7,6 @@ var locations = [
     {title: 'Midlothian Heritage High School', location: {lat:32.4846421,lng:-96.9440862}}
 ];
 
-//Variable to hold the map
-
 
 var ViewModel = function() {
 
@@ -20,12 +18,10 @@ var ViewModel = function() {
     this.locList = ko.observableArray(locations);
 
     //Intialize the current location
-    this.currentLoc = ko.observable(this.locList()[0]);
+    this.selectLoc = ko.observable('');
 
+    //Array to hold location markers
     var markers = [];
-    //Style the markers a bit
-    //var defaultIcon = makeMarkerIcon('0091ff');
-
 
     for(var i = 0; i < this.locList().length; i++) {
         //Get position and title from the locList array
@@ -44,7 +40,7 @@ var ViewModel = function() {
         markers.push(marker);
     }
 
-    function showMarkers() {
+    function placeMarkers() {
         var bounds = new google.maps.LatLngBounds();
 
         for (var i = 0; i < markers.length; i++) {
@@ -55,17 +51,40 @@ var ViewModel = function() {
         map.fitBounds(bounds);
     }
 
-    showMarkers();
+    //http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
+
+    this.filteredItems = ko.computed(function() {
+        var filter = that.selectLoc().toLowerCase();
+
+        if(!filter) {
+            //console.log('Empty!!!');
+            return that.locList();
+        } else {
+            return ko.utils.arrayFilter(that.locList(), function(item) {
+                //console.log(item);
+                return item.title === 'Campuzano Fine Mexican Food';
+            });
+        }
+    });
+
+
+    placeMarkers();
 };
 
+//Variable to hold the map
 var map;
 
 function initMap() {
 
+    //Style the map
+    //https://snazzymaps.com/style/2/midnight-commander
+    var styles = [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"color":"#000000"},{"lightness":13}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#144b53"},{"lightness":14},{"weight":1.4}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#08304b"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#0c4152"},{"lightness":5}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#0b434f"},{"lightness":25}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.arterial","elementType":"geometry.stroke","stylers":[{"color":"#0b3d51"},{"lightness":16}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#000000"}]},{"featureType":"transit","elementType":"all","stylers":[{"color":"#146474"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#021019"}]}];
+
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 32.482361, lng: -96.994448899999},
         zoom: 13,
-        mapTypeControl: true
+        mapTypeControl: true,
+        styles: styles
     });
 
     ko.applyBindings(new ViewModel());
