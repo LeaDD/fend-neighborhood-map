@@ -52,11 +52,10 @@ var ViewModel = function() {
     }
 
     //http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
-
     this.filteredItems = ko.computed(function() {
         var filter = that.selectLoc().toLowerCase();
 
-        if(!filter) {
+        if(filter === '') {
             //console.log('Empty!!!');
             return that.locList();
         } else {
