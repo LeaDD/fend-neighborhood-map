@@ -17,18 +17,18 @@ var ViewModel = function() {
     //automatically update any bound DOM elements whenever the array changes.
     this.locList = ko.observableArray(locations);
 
+    //Array to hold location markers
+    this.markers = ko.observableArray([]);
+
     //Intialize the current location
     this.selectLoc = ko.observable('');
 
-    //Array to hold location markers
-    var markers = [];
-
+    //Create the location markers and push to the observable array
     for(var i = 0; i < this.locList().length; i++) {
         //Get position and title from the locList array
         var position = this.locList()[i].location;
         var title = this.locList()[i].title;
 
-        //Create marker per location and put into markers array
         var marker = new google.maps.Marker({
             position: position,
             title: title,
@@ -37,16 +37,16 @@ var ViewModel = function() {
             id: i
         });
 
-        markers.push(marker);
+        this.markers.push(marker);
     }
 
-    function placeMarkers() {
+    this.placeMarkers = function() {
         var bounds = new google.maps.LatLngBounds();
 
-        for (var i = 0; i < markers.length; i++) {
-            markers[i].setMap(map);
+        for (var i = 0; i < that.markers().length; i++) {
+            that.markers()[i].setMap(map);
             //Extend the boundaries of the map to show all markers
-            bounds.extend(markers[i].position);
+            bounds.extend(that.markers()[i].position);
         }
         map.fitBounds(bounds);
     }
@@ -55,19 +55,37 @@ var ViewModel = function() {
     this.filteredItems = ko.computed(function() {
         var filter = that.selectLoc().toLowerCase();
 
-        if(filter === '') {
-            //console.log('Empty!!!');
+        if(!filter) {
             return that.locList();
         } else {
             return ko.utils.arrayFilter(that.locList(), function(item) {
-                //console.log(item);
-                return item.title === 'Campuzano Fine Mexican Food';
+                var loc = item.title.toLowerCase();
+                //https://stackoverflow.com/questions/1789945/how-to-check-whether-a-string-contains-a-substring-in-javascript
+                return loc.indexOf(filter) !== -1;
             });
         }
     });
 
+    //http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
+    this.filteredMarkers = ko.computed(function() {
+        var filter = that.selectLoc().toLowerCase();
 
-    placeMarkers();
+        if(!filter) {
+            console.log('Hi!!');
+        } else {
+            return ko.utils.arrayFilter(that.markers(), function(item) {
+                var loc = item.title.toLowerCase();
+                console.log(item);
+                if (loc.indexOf(filter) === -1) {
+                    item.setVisible(false);
+                }
+            })
+        }
+    });
+
+
+    //Initial marker placement
+    this.placeMarkers();
 };
 
 //Variable to hold the map
