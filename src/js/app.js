@@ -51,6 +51,7 @@ var ViewModel = function() {
         map.fitBounds(bounds);
     }
 
+//Seems like these two should be able to be combined.
     //http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
     this.filteredItems = ko.computed(function() {
         var filter = that.selectLoc().toLowerCase();
@@ -75,7 +76,7 @@ var ViewModel = function() {
         } else {
             return ko.utils.arrayFilter(that.markers(), function(item) {
                 var loc = item.title.toLowerCase();
-                console.log(item);
+                //console.log(item);
                 if (loc.indexOf(filter) === -1) {
                     item.setVisible(false);
                 }
