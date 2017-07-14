@@ -112,3 +112,8 @@ function initMap() {
     ko.applyBindings(new ViewModel());
 }
 
+$('.hamburger').click(function () {
+    $('#select-box').slideToggle('slow', function() {
+        console.log('TEST');
+    });
+});
