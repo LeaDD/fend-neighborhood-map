@@ -37,6 +37,10 @@ var ViewModel = function() {
             id: i
         });
 
+        marker.addListener('click', function() {
+            this.setAnimation(google.maps.Animation.BOUNCE);
+        })
+
         this.markers.push(marker);
     }
 
