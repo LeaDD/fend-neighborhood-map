@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="author" content="David Deal"><meta name="description" content="Udacity Frontend Web Dev Neigborhood Map Project"><script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><title>Darth Midlo's Neighborhood</title><style type="text/css">* {
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="author" content="David Deal"><meta name="description" content="Udacity Frontend Web Dev Neigborhood Map Project"><script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script><script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><title>Darth Midlo's Neighborhood</title><style type="text/css">* {
                 -webkit-box-sizing: border-box;
                 -moz-box-sizing: border-box;
                 -ms-box-sizing: border-box;
@@ -39,6 +39,15 @@
                 height: 100%;
             }
 
+            #select-box {
+                height: 35%;
+            }
+
+            #list-box {
+                height: 240px;
+                overflow-y: auto;
+            }
+
             .list-head {
                 text-align: center;
             }
@@ -46,4 +55,33 @@
             #search-box {
                 width: 100%;
                 margin-bottom: 10px;
-            }</style></head><body><div class="container-fluid"><div class="row" id="banner"><div class="col-xs-12"><h1>Darth Midlo's Happy Habitat</h1></div></div><div class="row" id="map-block"><div class="col-sm-3" id="select-box"><h3 class="list-head">Things to Do & Places to Go</h3><input id="search-box" data-bind="value: selectLoc" type="search" placeholder="Type here to filter the list"><ul data-bind="foreach: filteredItems"><li><p data-bind="text: title"></p></li></ul></div><div class="col-sm-9" id="map"></div></div></div><script async type="text/javascript" src="lib/knockout-3.4.2.js"></script><script type="text/javascript" src="js/app.js"></script><script async defer="defer" src="https://maps.googleapis.com/maps/api/js?libraries=places,drawing,geometry&key=AIzaSyBvuITrVNeJb2d-iitT0s_ulfw8kc-CQJM&v=3&callback=initMap"></script></body></html>
+            }
+
+            /*https://codepen.io/g13nn/pen/eHGEF*/
+            .hamburger{
+              background:none;
+              top:20px;
+              left:20px;
+              line-height:45px;
+              padding:5px 15px 0px 15px;
+              color:darkslateblue;
+              border:0;
+              font-size:2.2em;
+              font-weight:bold;
+              cursor:pointer;
+              outline:none;
+              z-index:99;
+            }
+
+            .resp-btn {
+                padding-top: 15px;
+                padding-left: 30px;
+                text-align: left;
+            }
+
+            /*Hide the select box if the view port begins or is resized to < 992px*/
+            @media (max-width: 992px) {
+                #select-box {
+                    display: none;
+                }
+            }</style></head><body><div class="container-fluid"><div class="row" id="banner"><div class="col-xs-2 hidden-lg hidden-md resp-btn"><button class="hamburger">&#9776</button></div><div class="col-xs-10 col-sm-10 col-md-12 col-lg-12"><h1>Darth Midlo's Happy Habitat</h1></div></div><div class="row" id="map-block"><div class="col-md-3" id="select-box"><div><h3 class="list-head">Things to Do & Places to Go</h3><input id="search-box" data-bind="textInput: selectLoc" type="search" placeholder="Type here to filter the list"></div><div id="list-box"><ul data-bind="foreach: filteredItems"><li><p data-bind="text: title"></p></li></ul></div></div><div class="col-md-9" id="map"></div></div></div><script async type="text/javascript" src="lib/knockout-3.4.2.js"></script><script type="text/javascript" src="js/app.js"></script><script async defer="defer" src="https://maps.googleapis.com/maps/api/js?libraries=places,drawing,geometry&key=AIzaSyBvuITrVNeJb2d-iitT0s_ulfw8kc-CQJM&v=3&callback=initMap"></script></body></html>

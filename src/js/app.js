@@ -43,7 +43,7 @@ var ViewModel = function() {
             //a better way to do this would be appreciated.
             //https://coderwall.com/p/_ppzrw/be-careful-with-settimeout-in-loops
             setDelay(this);
-        })
+        });
 
         this.markers.push(marker);
     }
@@ -57,7 +57,7 @@ var ViewModel = function() {
             bounds.extend(that.markers()[i].position);
         }
         map.fitBounds(bounds);
-    }
+    };
 
 //Seems like these two should be able to be combined.
     //http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
@@ -88,10 +88,9 @@ var ViewModel = function() {
                 if (loc.indexOf(filter) === -1) {
                     item.setVisible(false);
                 }
-            })
+            });
         }
     });
-
 
     //Initial marker placement
     this.placeMarkers();
@@ -118,7 +117,7 @@ function initMap() {
 
 function setDelay(marker) {
     setTimeout(function() {
-        marker.setAnimation(null)
+        marker.setAnimation(null);
     }, 1400);
 }
 
@@ -137,10 +136,10 @@ $(window).resize(function() {
     //, toggle back on.
     if (width > 992 && $('#select-box').is(':hidden')) {
         $('#select-box').removeAttr('style');
-    };
+    }
 
     //If the view begins over 992, then reduces below hide the select list.
     if (width < 992 && $('#select-box').is(':visible')) {
         $('#select-box').hide();
-    };
+    }
 });
