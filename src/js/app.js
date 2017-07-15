@@ -4,11 +4,6 @@ var locations = [
     {title: 'Ellis County BBQ', location: {lat:32.476594,lng:-96.98378099999999}},
     {title: 'Mockingbird Nature Park', location: {lat:32.4980242,lng:-96.96453369999999}},
     {title: 'Big Cigar Racing', location: {lat:32.5052189,lng:-96.91816799999999}},
-    {title: 'Midlothian Heritage High School', location: {lat:32.4846421,lng:-96.9440862}},
-    {title: 'Campuzano Fine Mexican Food', location: {lat:32.482586,lng:-96.99423370000001}},
-    {title: 'Ellis County BBQ', location: {lat:32.476594,lng:-96.98378099999999}},
-    {title: 'Mockingbird Nature Park', location: {lat:32.4980242,lng:-96.96453369999999}},
-    {title: 'Big Cigar Racing', location: {lat:32.5052189,lng:-96.91816799999999}},
     {title: 'Midlothian Heritage High School', location: {lat:32.4846421,lng:-96.9440862}}
 ];
 
@@ -44,6 +39,10 @@ var ViewModel = function() {
 
         marker.addListener('click', function() {
             this.setAnimation(google.maps.Animation.BOUNCE);
+            //Call external function to setTimeout in order to deal with closure. Advice on
+            //a better way to do this would be appreciated.
+            //https://coderwall.com/p/_ppzrw/be-careful-with-settimeout-in-loops
+            setDelay(this);
         })
 
         this.markers.push(marker);
@@ -115,6 +114,12 @@ function initMap() {
     });
 
     ko.applyBindings(new ViewModel());
+}
+
+function setDelay(marker) {
+    setTimeout(function() {
+        marker.setAnimation(null)
+    }, 1400);
 }
 
 //Toggle slide the select list if hamburger button is clicked.
