@@ -4,6 +4,11 @@ var locations = [
     {title: 'Ellis County BBQ', location: {lat:32.476594,lng:-96.98378099999999}},
     {title: 'Mockingbird Nature Park', location: {lat:32.4980242,lng:-96.96453369999999}},
     {title: 'Big Cigar Racing', location: {lat:32.5052189,lng:-96.91816799999999}},
+    {title: 'Midlothian Heritage High School', location: {lat:32.4846421,lng:-96.9440862}},
+    {title: 'Campuzano Fine Mexican Food', location: {lat:32.482586,lng:-96.99423370000001}},
+    {title: 'Ellis County BBQ', location: {lat:32.476594,lng:-96.98378099999999}},
+    {title: 'Mockingbird Nature Park', location: {lat:32.4980242,lng:-96.96453369999999}},
+    {title: 'Big Cigar Racing', location: {lat:32.5052189,lng:-96.91816799999999}},
     {title: 'Midlothian Heritage High School', location: {lat:32.4846421,lng:-96.9440862}}
 ];
 
@@ -112,8 +117,25 @@ function initMap() {
     ko.applyBindings(new ViewModel());
 }
 
+//Toggle slide the select list if hamburger button is clicked.
+/*https://codepen.io/g13nn/pen/eHGEF*/
 $('.hamburger').click(function () {
-    $('#select-box').slideToggle('slow', function() {
-        console.log('TEST');
-    });
+    $('#select-box').toggle('slide');
+});
+
+
+//https://stackoverflow.com/questions/18873425/slidetoggle-not-displaying-div-when-screen-size-returns-to-bigger-size
+$(window).resize(function() {
+    var width = $(window).width();
+
+    //If the select list has been toggled off and the screen is returned to > 992px
+    //, toggle back on.
+    if (width > 992 && $('#select-box').is(':hidden')) {
+        $('#select-box').removeAttr('style');
+    };
+
+    //If the view begins over 992, then reduces below hide the select list.
+    if (width < 992 && $('#select-box').is(':visible')) {
+        $('#select-box').hide();
+    };
 });

@@ -13,6 +13,13 @@
           crossorigin="anonymous">
         </script>
 
+        <!--jQuery UI-->
+        <script
+          src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"
+          integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E="
+          crossorigin="anonymous">
+        </script>
+
         <!--Bootstrap-->
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -62,6 +69,15 @@
                 height: 100%;
             }
 
+            #select-box {
+                height: 35%;
+            }
+
+            #list-box {
+                height: 240px;
+                overflow-y: auto;
+            }
+
             .list-head {
                 text-align: center;
             }
@@ -93,6 +109,13 @@
                 text-align: left;
             }
 
+            /*Hide the select box if the view port begins or is resized to < 992px*/
+            @media (max-width: 992px) {
+                #select-box {
+                    display: none;
+                }
+            }
+
         </style>
 
     </head>
@@ -109,15 +132,20 @@
             </div>
             <div class='row' id='map-block'>
                 <div class='col-md-3' id='select-box'>
-                    <h3 class='list-head'>Things to Do & Places to Go</h3>
 
-                    <input id='search-box' data-bind='textInput: selectLoc' type='search' placeholder='Type here to filter the list'>
+                    <div>
+                        <h3 class='list-head'>Things to Do & Places to Go</h3>
 
-                    <ul data-bind='foreach: filteredItems'>
-                        <li>
-                            <p data-bind='text: title'></p>
-                        </li>
-                    </ul>
+                        <input id='search-box' data-bind='textInput: selectLoc' type='search' placeholder='Type here to filter the list'>
+                    </div>
+
+                    <div id='list-box'>
+                        <ul data-bind='foreach: filteredItems'>
+                            <li>
+                                <p data-bind='text: title'></p>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <div class='col-md-9' id='map'>
 
