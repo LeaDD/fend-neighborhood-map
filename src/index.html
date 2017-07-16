@@ -142,7 +142,7 @@
                     <div id='list-box'>
                         <ul data-bind='foreach: filteredItems'>
                             <li>
-                                <p data-bind='text: title'></p>
+                                <p data-bind='text: title, event: {click: $parent.clickMarker}'></p>
                             </li>
                         </ul>
                     </div>

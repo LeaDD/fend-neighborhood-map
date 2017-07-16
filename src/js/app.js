@@ -13,6 +13,8 @@ var ViewModel = function() {
     //Forces the content to stay within the viewmodel
     var that = this;
 
+    this.myInfoWindow = new google.maps.InfoWindow();
+
     //This will hold the objects in the locations array. The observable array will
     //automatically update any bound DOM elements whenever the array changes.
     this.locList = ko.observableArray(locations);
@@ -23,43 +25,6 @@ var ViewModel = function() {
     //Intialize the current location
     this.selectLoc = ko.observable('');
 
-    //Create the location markers and push to the observable array
-    for(var i = 0; i < this.locList().length; i++) {
-        //Get position and title from the locList array
-        var position = this.locList()[i].location;
-        var title = this.locList()[i].title;
-
-        var marker = new google.maps.Marker({
-            position: position,
-            title: title,
-            //icon: defaultIcon,
-            animation: google.maps.Animation.DROP,
-            id: i
-        });
-
-        marker.addListener('click', function() {
-            this.setAnimation(google.maps.Animation.BOUNCE);
-            //Call external function to setTimeout in order to deal with closure. Advice on
-            //a better way to do this would be appreciated.
-            //https://coderwall.com/p/_ppzrw/be-careful-with-settimeout-in-loops
-            setDelay(this);
-        });
-
-        this.markers.push(marker);
-    }
-
-    this.placeMarkers = function() {
-        var bounds = new google.maps.LatLngBounds();
-
-        for (var i = 0; i < that.markers().length; i++) {
-            that.markers()[i].setMap(map);
-            //Extend the boundaries of the map to show all markers
-            bounds.extend(that.markers()[i].position);
-        }
-        map.fitBounds(bounds);
-    };
-
-//Seems like these two should be able to be combined.
     //http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
     this.filteredItems = ko.computed(function() {
         var filter = that.selectLoc().toLowerCase();
@@ -75,25 +40,99 @@ var ViewModel = function() {
         }
     });
 
-    //http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
+    //Create the location markers and push to the observable array
+    this.createMarkers = function() {
+        for(var i = 0; i < this.locList().length; i++) {
+            //Get position and title from the locList array
+            var position = this.locList()[i].location;
+            var title = this.locList()[i].title;
+
+            // this.locList()[i].addListener('click', function() {
+            //     console.log('TEST');
+            //     //that.markers[i].click();
+            // });
+
+            var marker = new google.maps.Marker({
+                position: position,
+                title: title,
+                //icon: defaultIcon,
+                animation: google.maps.Animation.DROP,
+                id: i
+            });
+
+            marker.addListener('click', function() {
+                this.setAnimation(google.maps.Animation.BOUNCE);
+                //Call external function to setTimeout in order to deal with closure. Advice on
+                //a better way to do this would be appreciated.
+                //https://coderwall.com/p/_ppzrw/be-careful-with-settimeout-in-loops
+                setDelay(this);
+                //console.log(this);
+                populateInfoWindow(this,that.myInfoWindow);
+            });
+
+            this.markers.push(marker);
+        }
+    };
+
+    //Initial placement of markers
+    this.placeMarkers = function() {
+        var bounds = new google.maps.LatLngBounds();
+
+        for (var i = 0; i < that.markers().length; i++) {
+            that.markers()[i].setMap(map);
+            //Extend the boundaries of the map to show all markers
+            bounds.extend(that.markers()[i].position);
+        }
+        map.fitBounds(bounds);
+    };
+
+    //Hide markers
+    this.hideMarkers = function() {
+        for (var i = 0; i < that.markers().length; i++) {
+            that.markers()[i].setVisible(false);
+        }
+    };
+
     this.filteredMarkers = ko.computed(function() {
         var filter = that.selectLoc().toLowerCase();
 
         if(!filter) {
-            console.log('Hi!!');
-        } else {
+            //Initial marker placement
+            that.placeMarkers();
+         } else {
+            that.hideMarkers();
             return ko.utils.arrayFilter(that.markers(), function(item) {
                 var loc = item.title.toLowerCase();
                 //console.log(item);
-                if (loc.indexOf(filter) === -1) {
-                    item.setVisible(false);
+                if (loc.indexOf(filter) !== -1 || filter === null) {
+                    //item.setVisible(false);
+                    //that.placeMarkers();
+                    item.setVisible(true);
+                    console.log(loc.indexOf(filter));
                 }
             });
-        }
+         }
     });
 
-    //Initial marker placement
-    this.placeMarkers();
+    //Trying to have marker open when list item clicked. Not quite there yet.
+    this.clickMarker = function(item) {
+        var index = 0;
+        var marker;
+
+        for (var i = 0; i < that.markers().length; i++) {
+            //console.log(that.markers()[i].title);
+            if (that.markers()[i].title === item.title) {
+                //console.log('TRUE');
+                index = i;
+                break;
+            }
+        }
+
+        console.log(index);
+    };
+
+
+    this.createMarkers();
 };
 
 //Variable to hold the map
@@ -104,7 +143,6 @@ function initMap() {
     //Style the map
     //https://snazzymaps.com/style/2/midnight-commander
     var styles = [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"color":"#000000"},{"lightness":13}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#144b53"},{"lightness":14},{"weight":1.4}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#08304b"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#0c4152"},{"lightness":5}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#0b434f"},{"lightness":25}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.arterial","elementType":"geometry.stroke","stylers":[{"color":"#0b3d51"},{"lightness":16}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#000000"}]},{"featureType":"transit","elementType":"all","stylers":[{"color":"#146474"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#021019"}]}];
-    var myInfoWindow = new google.maps.InfoWindow();
 
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 32.482361, lng: -96.994448899999},
@@ -114,6 +152,18 @@ function initMap() {
     });
 
     ko.applyBindings(new ViewModel());
+}
+
+function populateInfoWindow(marker, infowindow) {
+    if(infowindow.marker != marker) {
+        infowindow.marker = marker;
+        infowindow.setContent('<div>' + marker.title + '</div>');
+        infowindow.open(map, marker);
+        infowindow.addListener('closeclick', function() {
+            infowindow.setMarker = null;
+        });
+    }
+
 }
 
 //setTimeout to terminate bounce animation on markers
