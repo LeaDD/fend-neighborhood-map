@@ -25,39 +25,18 @@ var ViewModel = function() {
     //Intialize the current location
     this.selectLoc = ko.observable('');
 
-    //http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
-    this.filteredItems = ko.computed(function() {
-        var filter = that.selectLoc().toLowerCase();
-
-        if(!filter) {
-            return that.locList();
-        } else {
-            return ko.utils.arrayFilter(that.locList(), function(item) {
-                var loc = item.title.toLowerCase();
-                //https://stackoverflow.com/questions/1789945/how-to-check-whether-a-string-contains-a-substring-in-javascript
-                return loc.indexOf(filter) !== -1;
-            });
-        }
-    });
-
     //Create the location markers and push to the observable array
-    this.createMarkers = function() {
-        for(var i = 0; i < this.locList().length; i++) {
+    this.locList().forEach(function(location) {
+        // for(var i = 0; i < this.locList().length; i++) {
             //Get position and title from the locList array
-            var position = this.locList()[i].location;
-            var title = this.locList()[i].title;
-
-            // this.locList()[i].addListener('click', function() {
-            //     console.log('TEST');
-            //     //that.markers[i].click();
-            // });
+            var position = location.location;
+            var title = location.title;
 
             var marker = new google.maps.Marker({
                 position: position,
                 title: title,
                 //icon: defaultIcon,
-                animation: google.maps.Animation.DROP,
-                id: i
+                animation: google.maps.Animation.DROP
             });
 
             marker.addListener('click', function() {
@@ -70,9 +49,31 @@ var ViewModel = function() {
                 populateInfoWindow(this,that.myInfoWindow);
             });
 
-            this.markers.push(marker);
+            that.markers.push(marker);
+
+            //Add the marker as a property to the location object
+            location.marker = marker;
+    });
+
+    //http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
+    this.filteredItems = ko.computed(function() {
+        var filter = that.selectLoc().toLowerCase();
+
+        if(!filter) {
+            return that.locList();
+        } else {
+            return ko.utils.arrayFilter(that.locList(), function(item) {
+                var loc = item.title.toLowerCase();
+                var test = loc.indexOf(filter)
+                //https://stackoverflow.com/questions/1789945/how-to-check-whether-a-string-contains-a-substring-in-javascript
+
+                item.marker.setVisible(test != -1)
+                console.log(test != -1);
+                return loc.indexOf(filter) !== -1;
+
+            });
         }
-    };
+    });
 
     //Initial placement of markers
     this.placeMarkers = function() {
@@ -93,26 +94,26 @@ var ViewModel = function() {
         }
     };
 
-    this.filteredMarkers = ko.computed(function() {
-        var filter = that.selectLoc().toLowerCase();
+    // this.filteredMarkers = ko.computed(function() {
+    //     var filter = that.selectLoc().toLowerCase();
 
-        if(!filter) {
-            //Initial marker placement
-            that.placeMarkers();
-         } else {
-            that.hideMarkers();
-            return ko.utils.arrayFilter(that.markers(), function(item) {
-                var loc = item.title.toLowerCase();
-                //console.log(item);
-                if (loc.indexOf(filter) !== -1 || filter === null) {
-                    //item.setVisible(false);
-                    //that.placeMarkers();
-                    item.setVisible(true);
-                    console.log(loc.indexOf(filter));
-                }
-            });
-         }
-    });
+    //     if(!filter) {
+    //         //Initial marker placement
+    //         that.placeMarkers();
+    //      } else {
+    //         that.hideMarkers();
+    //         return ko.utils.arrayFilter(that.markers(), function(item) {
+    //             var loc = item.title.toLowerCase();
+    //             //console.log(item);
+    //             if ($('#select-box').val() === '' || loc.indexOf(filter) !== -1) {
+    //                 //item.setVisible(false);
+    //                 //that.placeMarkers();
+    //                 item.setVisible(true);
+    //                 console.log($('#select-box').val());
+    //             }
+    //         });
+    //      }
+    // });
 
     //Trying to have marker open when list item clicked. Not quite there yet.
     this.clickMarker = function(item) {
@@ -128,11 +129,15 @@ var ViewModel = function() {
             }
         }
 
-        console.log(index);
+        console.log(that.markers()[index]);
     };
 
+    //this.createMarkers();
+    this.placeMarkers();
 
-    this.createMarkers();
+    // this.locList().forEach(function(x) {
+    //     console.log(x);
+    // })
 };
 
 //Variable to hold the map
