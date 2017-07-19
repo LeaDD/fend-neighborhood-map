@@ -4,6 +4,16 @@ var locations = [
     {title: 'Ellis County BBQ', location: {lat:32.476594,lng:-96.98378099999999}},
     {title: 'Mockingbird Nature Park', location: {lat:32.4980242,lng:-96.96453369999999}},
     {title: 'Big Cigar Racing', location: {lat:32.5052189,lng:-96.91816799999999}},
+    {title: 'Midlothian Heritage High School', location: {lat:32.4846421,lng:-96.9440862}},
+    {title: 'Campuzano Fine Mexican Food', location: {lat:32.482586,lng:-96.99423370000001}},
+    {title: 'Ellis County BBQ', location: {lat:32.476594,lng:-96.98378099999999}},
+    {title: 'Mockingbird Nature Park', location: {lat:32.4980242,lng:-96.96453369999999}},
+    {title: 'Big Cigar Racing', location: {lat:32.5052189,lng:-96.91816799999999}},
+    {title: 'Midlothian Heritage High School', location: {lat:32.4846421,lng:-96.9440862}},
+    {title: 'Campuzano Fine Mexican Food', location: {lat:32.482586,lng:-96.99423370000001}},
+    {title: 'Ellis County BBQ', location: {lat:32.476594,lng:-96.98378099999999}},
+    {title: 'Mockingbird Nature Park', location: {lat:32.4980242,lng:-96.96453369999999}},
+    {title: 'Big Cigar Racing', location: {lat:32.5052189,lng:-96.91816799999999}},
     {title: 'Midlothian Heritage High School', location: {lat:32.4846421,lng:-96.9440862}}
 ];
 
@@ -26,7 +36,7 @@ var ViewModel = function() {
     this.selectLoc = ko.observable('');
 
     //Create the location markers and push to the observable array
-    this.locList().forEach(function(location) {
+    this.createMarkers = this.locList().forEach(function(location) {
         // for(var i = 0; i < this.locList().length; i++) {
             //Get position and title from the locList array
             var position = location.location;
@@ -55,26 +65,6 @@ var ViewModel = function() {
             location.marker = marker;
     });
 
-    //http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
-    this.filteredItems = ko.computed(function() {
-        var filter = that.selectLoc().toLowerCase();
-
-        if(!filter) {
-            return that.locList();
-        } else {
-            return ko.utils.arrayFilter(that.locList(), function(item) {
-                var loc = item.title.toLowerCase();
-                var test = loc.indexOf(filter)
-                //https://stackoverflow.com/questions/1789945/how-to-check-whether-a-string-contains-a-substring-in-javascript
-
-                item.marker.setVisible(test != -1)
-                console.log(test != -1);
-                return loc.indexOf(filter) !== -1;
-
-            });
-        }
-    });
-
     //Initial placement of markers
     this.placeMarkers = function() {
         var bounds = new google.maps.LatLngBounds();
@@ -93,6 +83,32 @@ var ViewModel = function() {
             that.markers()[i].setVisible(false);
         }
     };
+
+            //http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
+    this.filteredItems = ko.computed(function() {
+        var filter = that.selectLoc().toLowerCase();
+
+        if(!filter) {
+            //this.createMarkers();
+            that.placeMarkers();
+
+            return that.locList();
+        } else {
+            return ko.utils.arrayFilter(that.locList(), function(item) {
+                var loc = item.title.toLowerCase();
+                var test = loc.indexOf(filter)
+                //https://stackoverflow.com/questions/1789945/how-to-check-whether-a-string-contains-a-substring-in-javascript
+
+                //Hide the items marker if the filter value substring does not exist within
+                //any of the location list values, or show if the filter value does exist
+                item.marker.setVisible(test !== -1)
+
+                //Return the filtered list to the DOM element that displays list items.
+                return loc.indexOf(filter) !== -1;
+
+            });
+        }
+    });
 
     // this.filteredMarkers = ko.computed(function() {
     //     var filter = that.selectLoc().toLowerCase();
@@ -132,12 +148,6 @@ var ViewModel = function() {
         console.log(that.markers()[index]);
     };
 
-    //this.createMarkers();
-    this.placeMarkers();
-
-    // this.locList().forEach(function(x) {
-    //     console.log(x);
-    // })
 };
 
 //Variable to hold the map

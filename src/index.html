@@ -52,6 +52,7 @@
                 list-style: none;
             }
 
+            /*Page level row elements*/
             #banner {
                 height: 4%;
                 text-align: right;
@@ -60,21 +61,24 @@
             }
 
             #map-block {
-                height: 94%;
+                height: 93%;
                 bottom: 0px;
                 margin-bottom: 0px;
+            }
+
+            /*map-block columns*/
+            #select-box {
+                height: 40%;
             }
 
             #map {
                 height: 100%;
             }
 
-            #select-box {
-                height: 35%;
-            }
 
+            /*select-box elements*/
             #list-box {
-                height: 240px;
+                height: 40%;
                 overflow-y: auto;
             }
 
@@ -87,6 +91,7 @@
                 margin-bottom: 10px;
             }
 
+            /*Hamburger menu stuff*/
             /*https://codepen.io/g13nn/pen/eHGEF*/
             .hamburger{
               background:none;
@@ -109,6 +114,7 @@
                 text-align: left;
             }
 
+            /*Mobile size*/
             /*Hide the select box if the view port begins or is resized to < 992px*/
             @media (max-width: 992px) {
                 #select-box {
@@ -132,11 +138,10 @@
             </div>
             <div class='row' id='map-block'>
                 <div class='col-md-3' id='select-box'>
-
                     <div>
                         <h3 class='list-head'>Things to Do & Places to Go</h3>
 
-                        <input id='search-box' data-bind='textInput: selectLoc' type='search' placeholder='Type here to filter the list'>
+                        <input id='search-box' data-bind='textInput: selectLoc' type='search' placeholder=' Type here to filter the list'>
                     </div>
 
                     <div id='list-box'>
