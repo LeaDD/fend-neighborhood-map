@@ -4,16 +4,6 @@ var locations = [
     {title: 'Ellis County BBQ', location: {lat:32.476594,lng:-96.98378099999999}},
     {title: 'Mockingbird Nature Park', location: {lat:32.4980242,lng:-96.96453369999999}},
     {title: 'Big Cigar Racing', location: {lat:32.5052189,lng:-96.91816799999999}},
-    {title: 'Midlothian Heritage High School', location: {lat:32.4846421,lng:-96.9440862}},
-    {title: 'Campuzano Fine Mexican Food', location: {lat:32.482586,lng:-96.99423370000001}},
-    {title: 'Ellis County BBQ', location: {lat:32.476594,lng:-96.98378099999999}},
-    {title: 'Mockingbird Nature Park', location: {lat:32.4980242,lng:-96.96453369999999}},
-    {title: 'Big Cigar Racing', location: {lat:32.5052189,lng:-96.91816799999999}},
-    {title: 'Midlothian Heritage High School', location: {lat:32.4846421,lng:-96.9440862}},
-    {title: 'Campuzano Fine Mexican Food', location: {lat:32.482586,lng:-96.99423370000001}},
-    {title: 'Ellis County BBQ', location: {lat:32.476594,lng:-96.98378099999999}},
-    {title: 'Mockingbird Nature Park', location: {lat:32.4980242,lng:-96.96453369999999}},
-    {title: 'Big Cigar Racing', location: {lat:32.5052189,lng:-96.91816799999999}},
     {title: 'Midlothian Heritage High School', location: {lat:32.4846421,lng:-96.9440862}}
 ];
 
@@ -131,21 +121,11 @@ var ViewModel = function() {
     //      }
     // });
 
-    //Trying to have marker open when list item clicked. Not quite there yet.
-    this.clickMarker = function(item) {
-        var index = 0;
-        var marker;
-
-        for (var i = 0; i < that.markers().length; i++) {
-            //console.log(that.markers()[i].title);
-            if (that.markers()[i].title === item.title) {
-                //console.log('TRUE');
-                index = i;
-                break;
-            }
-        }
-
-        console.log(that.markers()[index]);
+    //Animate and open marker when list item clicked. Not quite there yet.
+    this.listActivateMarker = function(item) {
+        item.marker.setAnimation(google.maps.Animation.BOUNCE);
+        setDelay(item.marker);
+        populateInfoWindow(item.marker,that.myInfoWindow);
     };
 
 };
