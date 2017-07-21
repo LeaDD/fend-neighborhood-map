@@ -74,7 +74,7 @@ var ViewModel = function() {
         }
     };
 
-            //http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
+    //http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
     this.filteredItems = ko.computed(function() {
         var filter = that.selectLoc().toLowerCase();
 
@@ -121,8 +121,10 @@ var ViewModel = function() {
     //      }
     // });
 
-    //Animate and open marker when list item clicked. Not quite there yet.
+    //Animate and open marker when list item clicked. Tried to do this by simulating a click
+    //of the existing marker but couldn't get it to work.
     this.listActivateMarker = function(item) {
+        //item.marker.click();
         item.marker.setAnimation(google.maps.Animation.BOUNCE);
         setDelay(item.marker);
         populateInfoWindow(item.marker,that.myInfoWindow);
@@ -159,6 +161,11 @@ function populateInfoWindow(marker, infowindow) {
         });
     }
 
+}
+
+function getPlacesDetail(marker, infowindow) {
+    //TODO - Will use this to get additional info for 
+    //each marker at the time it is selected.
 }
 
 //setTimeout to terminate bounce animation on markers
