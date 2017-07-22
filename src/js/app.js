@@ -27,32 +27,34 @@ var ViewModel = function() {
 
     //Create the location markers and push to the observable array
     this.createMarkers = this.locList().forEach(function(location) {
-        // for(var i = 0; i < this.locList().length; i++) {
-            //Get position and title from the locList array
-            var position = location.location;
-            var title = location.title;
 
-            var marker = new google.maps.Marker({
-                position: position,
-                title: title,
-                //icon: defaultIcon,
-                animation: google.maps.Animation.DROP
-            });
+        //Get position and title from the locList array
+        var position = location.location;
+        var title = location.title;
 
-            marker.addListener('click', function() {
-                this.setAnimation(google.maps.Animation.BOUNCE);
-                //Call external function to setTimeout in order to deal with closure. Advice on
-                //a better way to do this would be appreciated.
-                //https://coderwall.com/p/_ppzrw/be-careful-with-settimeout-in-loops
-                setDelay(this);
-                //console.log(this);
-                populateInfoWindow(this,that.myInfoWindow);
-            });
+        //Create the markers
+        var marker = new google.maps.Marker({
+            position: position,
+            title: title,
+            //icon: defaultIcon,
+            animation: google.maps.Animation.DROP
+        });
 
-            that.markers.push(marker);
+        //Change the animation if the marker is clicked
+        marker.addListener('click', function() {
+            this.setAnimation(google.maps.Animation.BOUNCE);
+            //Call external function to setTimeout in order to deal with closure. Advice on
+            //a better way to do this would be appreciated.
+            //https://coderwall.com/p/_ppzrw/be-careful-with-settimeout-in-loops
+            setDelay(this);
+            //console.log(this);
+            populateInfoWindow(this,that.myInfoWindow);
+        });
 
-            //Add the marker as a property to the location object
-            location.marker = marker;
+        that.markers.push(marker);
+
+        //Add the marker as a property to the location object
+        location.marker = marker;
     });
 
     //Initial placement of markers
@@ -79,47 +81,34 @@ var ViewModel = function() {
         var filter = that.selectLoc().toLowerCase();
 
         if(!filter) {
-            //this.createMarkers();
+            //Initial placement of markers
             that.placeMarkers();
 
-            return that.locList();
+            //This was the only way I could figure out to set all the markers back
+            //to visible if the input box was cleared.
+            return ko.utils.arrayFilter(that.locList(), function(item) {
+                item.marker.setVisible(true);
+
+                //Return the filtered list to the DOM element that displays list items.
+                //return loc;
+                return that.locList();
+            });
+
         } else {
             return ko.utils.arrayFilter(that.locList(), function(item) {
-                var loc = item.title.toLowerCase();
-                var test = loc.indexOf(filter)
                 //https://stackoverflow.com/questions/1789945/how-to-check-whether-a-string-contains-a-substring-in-javascript
+                var locPick = (item.title.toLowerCase().indexOf(filter) > -1);
 
                 //Hide the items marker if the filter value substring does not exist within
                 //any of the location list values, or show if the filter value does exist
-                item.marker.setVisible(test !== -1)
+                item.marker.setVisible(locPick);
 
                 //Return the filtered list to the DOM element that displays list items.
-                return loc.indexOf(filter) !== -1;
+                return locPick;
 
             });
         }
     });
-
-    // this.filteredMarkers = ko.computed(function() {
-    //     var filter = that.selectLoc().toLowerCase();
-
-    //     if(!filter) {
-    //         //Initial marker placement
-    //         that.placeMarkers();
-    //      } else {
-    //         that.hideMarkers();
-    //         return ko.utils.arrayFilter(that.markers(), function(item) {
-    //             var loc = item.title.toLowerCase();
-    //             //console.log(item);
-    //             if ($('#select-box').val() === '' || loc.indexOf(filter) !== -1) {
-    //                 //item.setVisible(false);
-    //                 //that.placeMarkers();
-    //                 item.setVisible(true);
-    //                 console.log($('#select-box').val());
-    //             }
-    //         });
-    //      }
-    // });
 
     //Animate and open marker when list item clicked. Tried to do this by simulating a click
     //of the existing marker but couldn't get it to work.
@@ -164,8 +153,10 @@ function populateInfoWindow(marker, infowindow) {
 }
 
 function getPlacesDetail(marker, infowindow) {
-    //TODO - Will use this to get additional info for 
+    //TODO - Will use this to get additional info for
     //each marker at the time it is selected.
+    var service = new google.maps.PlacesService(map);
+
 }
 
 //setTimeout to terminate bounce animation on markers
