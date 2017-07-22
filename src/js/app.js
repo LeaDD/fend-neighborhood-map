@@ -4,7 +4,11 @@ var locations = [
     {title: 'Ellis County BBQ', location: {lat:32.476594,lng:-96.98378099999999}},
     {title: 'Mockingbird Nature Park', location: {lat:32.4980242,lng:-96.96453369999999}},
     {title: 'Big Cigar Racing', location: {lat:32.5052189,lng:-96.91816799999999}},
-    {title: 'Midlothian Heritage High School', location: {lat:32.4846421,lng:-96.9440862}}
+    {title: 'Midlothian Heritage High School', location: {lat:32.4846421,lng:-96.9440862}},
+    {title: 'Branded Burger Co.', location: {lat:32.4823516,lng:-96.9942736}},
+    {title: 'Games Unplugged', location: {lat:32.4755504,lng:-96.98215709999999}},
+    {title: 'The Philly Cheese Steak Factory', location: {lat:32.4478457,lng:-96.99794229999999}},
+    {title: 'Main Street Games', location: {lat:32.4710552,lng:-96.956988}}
 ];
 
 
@@ -123,6 +127,10 @@ var ViewModel = function() {
 
 //Variable to hold the map
 var map;
+
+//Flickr API info
+var flickrKey = '60a4a12c25ae2f6cca0c8e9dbabf0e07';
+var flickrSecret = 'b429da77cd8c0841';
 
 function initMap() {
 
