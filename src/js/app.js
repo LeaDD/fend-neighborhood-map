@@ -1,27 +1,50 @@
+//Variable to hold the map
+var map;
+//Flickr API info
+var fsClient_ID = '1F5ZQMD1CLQPF4Q1M0MCR1E2DI5SD1PDLZNG2WYNA3PHQMY4';
+var fsClient_Secret = 'DKCV4XJIO3O1ENQGIRCMTH3RRR4140FFGRNUC2H3RFETWZQ4';
+var midlo = {
+    lat : 32.482361,
+    lng : -96.99444889999999
+            };
+
+var frogs = [];
+var fsURL = 'https://api.foursquare.com/v2/venues/search?ll=' + midlo.lat.toString() +
+    ',' + midlo.lng.toString() + '&radius=6000&client_id=' + fsClient_ID + '&client_secret=' +
+    fsClient_Secret + '&limit=50&v=20170723';
+
+
 //Data model
 var locations = [
     {title: 'Campuzano Fine Mexican Food', location: {lat:32.482586,lng:-96.99423370000001}},
     {title: 'Ellis County BBQ', location: {lat:32.476594,lng:-96.98378099999999}},
     {title: 'Mockingbird Nature Park', location: {lat:32.4980242,lng:-96.96453369999999}},
-    {title: 'Big Cigar Racing', location: {lat:32.5052189,lng:-96.91816799999999}},
+    {title: 'Love\'s Travel Stop', location: {lat:32.4831244,lng:-97.01110989999999}},
     {title: 'Midlothian Heritage High School', location: {lat:32.4846421,lng:-96.9440862}},
+    {title: 'Midlothian High School', location: {lat:32.4711728,lng:-96.9949171}},
     {title: 'Branded Burger Co.', location: {lat:32.4823516,lng:-96.9942736}},
     {title: 'Games Unplugged', location: {lat:32.4755504,lng:-96.98215709999999}},
     {title: 'The Philly Cheese Steak Factory', location: {lat:32.4478457,lng:-96.99794229999999}},
-    {title: 'Main Street Games', location: {lat:32.4710552,lng:-96.956988}}
+    {title: 'Texas Best Smookehouse', location: {lat:32.459186,lng:-96.94213099999999}},
+    {title: 'Hawkins Spring Park', location: {lat:32.48742560000001,lng:-96.9779611}},
+    {title: 'Navarro College', location: {lat:32.4622997,lng:-96.983133}},
+    {title: 'Lighthouse Coffee Bar', location: {lat:32.497383,lng:-96.993484}}
 ];
-
 
 var ViewModel = function() {
 
     //Forces the content to stay within the viewmodel
     var that = this;
 
+
+
     this.myInfoWindow = new google.maps.InfoWindow();
 
     //This will hold the objects in the locations array. The observable array will
     //automatically update any bound DOM elements whenever the array changes.
     this.locList = ko.observableArray(locations);
+
+    console.log(this.locList());
 
     //Array to hold location markers
     this.markers = ko.observableArray([]);
@@ -125,15 +148,7 @@ var ViewModel = function() {
 
 };
 
-//Variable to hold the map
-var map;
-
-//Flickr API info
-var flickrKey = '60a4a12c25ae2f6cca0c8e9dbabf0e07';
-var flickrSecret = 'b429da77cd8c0841';
-
 function initMap() {
-
     //Style the map
     //https://snazzymaps.com/style/2/midnight-commander
     var styles = [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"color":"#000000"},{"lightness":13}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#144b53"},{"lightness":14},{"weight":1.4}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#08304b"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#0c4152"},{"lightness":5}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#0b434f"},{"lightness":25}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.arterial","elementType":"geometry.stroke","stylers":[{"color":"#0b3d51"},{"lightness":16}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#000000"}]},{"featureType":"transit","elementType":"all","stylers":[{"color":"#146474"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#021019"}]}];
@@ -144,6 +159,8 @@ function initMap() {
         mapTypeControl: true,
         styles: styles
     });
+
+    getLocations(fsURL);
 
     ko.applyBindings(new ViewModel());
 }
@@ -159,6 +176,31 @@ function populateInfoWindow(marker, infowindow) {
     }
 
 }
+
+//Call Foursquare API to get locations in a radius around a (currently) hard coded
+//set of coordinates.
+function getLocations(fsURL) {
+    $.getJSON(fsURL, function(data) {
+        var venues = data.response.venues;
+
+        //return venues;
+        for (var i = 0; i < venues.length; i++) {
+            var venue = {};
+
+            venue.title = venues[i].name;
+            venue.address = venues[i].location.address;
+            venue.lat = venues[i].location.lat;
+            venue.lng = venues[i].location.lng;
+            venue.location = {lat: venues[i].location.lat, lng: venues[i].location.lng};
+            venue.url = venues[i].url;
+
+            frogs.push(venue);
+        }
+    }).fail(function(err) {
+    window.alert('There was an error loading the locations from Foursquare. ' +
+        'Error message: ' + err.responseText);
+    })
+};
 
 function getPlacesDetail(marker, infowindow) {
     //TODO - Will use this to get additional info for
@@ -179,7 +221,6 @@ function setDelay(marker) {
 $('.hamburger').click(function () {
     $('#select-box').toggle('slide');
 });
-
 
 //https://stackoverflow.com/questions/18873425/slidetoggle-not-displaying-div-when-screen-size-returns-to-bigger-size
 $(window).resize(function() {
