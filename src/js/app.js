@@ -6,7 +6,7 @@ var fsClient_Secret = 'DKCV4XJIO3O1ENQGIRCMTH3RRR4140FFGRNUC2H3RFETWZQ4';
 var midlo = {lat : 32.482361, lng : -96.99444889999999};
 var fsURL = 'https://api.foursquare.com/v2/venues/search?ll=' + midlo.lat.toString() +
     ',' + midlo.lng.toString() + '&radius=1000&client_id=' + fsClient_ID + '&client_secret=' +
-    fsClient_Secret + '&limit=25&categoryId=4d4b7104d754a06370d81259,4d4b7105d754a06372d81259,' +
+    fsClient_Secret + '&limit=35&categoryId=4d4b7104d754a06370d81259,4d4b7105d754a06372d81259,' +
     '4d4b7105d754a06374d81259&v=20170723';
 var locations = [];
 
@@ -117,7 +117,7 @@ var ViewModel = function() {
         }).fail(function(err) {
         window.alert('There was an error loading the locations from Foursquare. ' +
             'Error message: ' + err.responseText);
-        })
+        });
     }(fsURL);
 
     //Computed observable to manage hiding and displaying list items and markers
@@ -195,6 +195,10 @@ function setDelay(marker) {
     setTimeout(function() {
         marker.setAnimation(null);
     }, 1400);
+}
+
+function mapLoadError() {
+    window.alert('Google maps failed to load. Please check your connection or try again later.');
 }
 
 //Toggle slide the select list if hamburger button is clicked.

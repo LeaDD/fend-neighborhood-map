@@ -28,6 +28,7 @@
 
         <style type="text/css">
 
+            /*Default styles will be for small mobile devices*/
             * {
                 -webkit-box-sizing: border-box;
                 -moz-box-sizing: border-box;
@@ -114,6 +115,30 @@
                 text-align: left;
             }
 
+            /*Tablet viewports*/
+            @media (min-width: 768px) and (max-width: 1199px) {
+                #select-box {
+                    height: 40%;
+                }
+
+                #list-box {
+                    height: 70%;
+                    overflow-y: auto;
+                }
+            }
+
+            /*Laptop and Desktop viewports*/
+            @media (min-width: 1200px) {
+                #select-box {
+                    height: 91%;
+                }
+
+                #list-box {
+                    height: 100%;
+                    overflow-y: auto;
+                }
+            }
+
             /*Mobile size*/
             /*Hide the select box if the view port begins or is resized to < 992px*/
             @media (max-width: 992px) {
@@ -160,12 +185,12 @@
         </div>
 
         <!--knockout.js-->
-        <script async type="text/javascript" src='lib/knockout-3.4.2.js'></script>
+        <script async type='text/javascript' src='lib/knockout-3.4.2.js'></script>
         <!--The app-->
-        <script async defer type="text/javascript" src='js/app.js'></script>
+        <script async defer type='text/javascript' src='js/app.js'></script>
         <!--Google maps-->
         <script async defer
-            src="https://maps.googleapis.com/maps/api/js?libraries=places,drawing,geometry&key=AIzaSyBvuITrVNeJb2d-iitT0s_ulfw8kc-CQJM&v=3&callback=initMap">
+            src='https://maps.googleapis.com/maps/api/js?libraries=places,drawing,geometry&key=AIzaSyBvuITrVNeJb2d-iitT0s_ulfw8kc-CQJM&v=3&callback=initMap' onerror='mapLoadError()'>
         </script>
 
     </body>
