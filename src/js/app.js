@@ -3,40 +3,17 @@ var map;
 //Flickr API info
 var fsClient_ID = '1F5ZQMD1CLQPF4Q1M0MCR1E2DI5SD1PDLZNG2WYNA3PHQMY4';
 var fsClient_Secret = 'DKCV4XJIO3O1ENQGIRCMTH3RRR4140FFGRNUC2H3RFETWZQ4';
-var midlo = {
-    lat : 32.482361,
-    lng : -96.99444889999999
-            };
-
-var frogs = [];
+var midlo = {lat : 32.482361, lng : -96.99444889999999};
 var fsURL = 'https://api.foursquare.com/v2/venues/search?ll=' + midlo.lat.toString() +
-    ',' + midlo.lng.toString() + '&radius=6000&client_id=' + fsClient_ID + '&client_secret=' +
-    fsClient_Secret + '&limit=50&v=20170723';
-
-
-//Data model
-var locations = [
-    {title: 'Campuzano Fine Mexican Food', location: {lat:32.482586,lng:-96.99423370000001}},
-    {title: 'Ellis County BBQ', location: {lat:32.476594,lng:-96.98378099999999}},
-    {title: 'Mockingbird Nature Park', location: {lat:32.4980242,lng:-96.96453369999999}},
-    {title: 'Love\'s Travel Stop', location: {lat:32.4831244,lng:-97.01110989999999}},
-    {title: 'Midlothian Heritage High School', location: {lat:32.4846421,lng:-96.9440862}},
-    {title: 'Midlothian High School', location: {lat:32.4711728,lng:-96.9949171}},
-    {title: 'Branded Burger Co.', location: {lat:32.4823516,lng:-96.9942736}},
-    {title: 'Games Unplugged', location: {lat:32.4755504,lng:-96.98215709999999}},
-    {title: 'The Philly Cheese Steak Factory', location: {lat:32.4478457,lng:-96.99794229999999}},
-    {title: 'Texas Best Smookehouse', location: {lat:32.459186,lng:-96.94213099999999}},
-    {title: 'Hawkins Spring Park', location: {lat:32.48742560000001,lng:-96.9779611}},
-    {title: 'Navarro College', location: {lat:32.4622997,lng:-96.983133}},
-    {title: 'Lighthouse Coffee Bar', location: {lat:32.497383,lng:-96.993484}}
-];
+    ',' + midlo.lng.toString() + '&radius=1000&client_id=' + fsClient_ID + '&client_secret=' +
+    fsClient_Secret + '&limit=25&categoryId=4d4b7104d754a06370d81259,4d4b7105d754a06372d81259,' +
+    '4d4b7105d754a06374d81259&v=20170723';
+var locations = [];
 
 var ViewModel = function() {
 
     //Forces the content to stay within the viewmodel
     var that = this;
-
-
 
     this.myInfoWindow = new google.maps.InfoWindow();
 
@@ -44,7 +21,7 @@ var ViewModel = function() {
     //automatically update any bound DOM elements whenever the array changes.
     this.locList = ko.observableArray(locations);
 
-    console.log(this.locList());
+    //console.log(this.locList());
 
     //Array to hold location markers
     this.markers = ko.observableArray([]);
@@ -53,40 +30,44 @@ var ViewModel = function() {
     this.selectLoc = ko.observable('');
 
     //Create the location markers and push to the observable array
-    this.createMarkers = this.locList().forEach(function(location) {
+    this.createMarkers = function() {
+        this.locList().forEach(function(location) {
 
-        //Get position and title from the locList array
-        var position = location.location;
-        var title = location.title;
+            //Get position and title from the locList array
+            var position = location.location;
+            var title = location.title;
 
-        //Create the markers
-        var marker = new google.maps.Marker({
-            position: position,
-            title: title,
-            //icon: defaultIcon,
-            animation: google.maps.Animation.DROP
+            //Create the markers
+            var marker = new google.maps.Marker({
+                position: position,
+                title: title,
+                //address: address,
+                //icon: defaultIcon,
+                animation: google.maps.Animation.DROP
+            });
+
+            //Change the animation if the marker is clicked
+            marker.addListener('click', function() {
+                this.setAnimation(google.maps.Animation.BOUNCE);
+                //Call external function to setTimeout in order to deal with closure. Advice on
+                //a better way to do this would be appreciated.
+                //https://coderwall.com/p/_ppzrw/be-careful-with-settimeout-in-loops
+                setDelay(this);
+                populateInfoWindow(this,that.myInfoWindow);
+            });
+
+            that.markers.push(marker);
+
+            //Add the marker as a property to the location object
+            location.marker = marker;
         });
-
-        //Change the animation if the marker is clicked
-        marker.addListener('click', function() {
-            this.setAnimation(google.maps.Animation.BOUNCE);
-            //Call external function to setTimeout in order to deal with closure. Advice on
-            //a better way to do this would be appreciated.
-            //https://coderwall.com/p/_ppzrw/be-careful-with-settimeout-in-loops
-            setDelay(this);
-            //console.log(this);
-            populateInfoWindow(this,that.myInfoWindow);
-        });
-
-        that.markers.push(marker);
-
-        //Add the marker as a property to the location object
-        location.marker = marker;
-    });
+    };
 
     //Initial placement of markers
     this.placeMarkers = function() {
         var bounds = new google.maps.LatLngBounds();
+
+        that.createMarkers();
 
         for (var i = 0; i < that.markers().length; i++) {
             that.markers()[i].setMap(map);
@@ -97,30 +78,57 @@ var ViewModel = function() {
     };
 
     //Hide markers
+    this.showMarkers = function() {
+        for (var i = 0; i < that.markers().length; i++) {
+            that.markers()[i].setVisible(true);
+        }
+    };
+
+    //Hide markers
     this.hideMarkers = function() {
         for (var i = 0; i < that.markers().length; i++) {
             that.markers()[i].setVisible(false);
         }
     };
 
+    //Call Foursquare API to get locations in a radius around a (currently) hard coded
+    //set of coordinates.
+    this.getLocations = function(fsURL) {
+        $.getJSON(fsURL, function(data) {
+            var venues = data.response.venues;
+
+            console.log(venues);
+
+            //return venues;
+            for (var i = 0; i < venues.length; i++) {
+                var venue = {};
+
+                venue.title = venues[i].name;
+                venue.address = venues[i].location.address;
+                venue.lat = venues[i].location.lat;
+                venue.lng = venues[i].location.lng;
+                venue.location = {lat: venues[i].location.lat, lng: venues[i].location.lng};
+                venue.url = venues[i].url;
+
+                locations.push(venue);
+                console.log(venue);
+            }
+            that.placeMarkers();
+        }).fail(function(err) {
+        window.alert('There was an error loading the locations from Foursquare. ' +
+            'Error message: ' + err.responseText);
+        })
+    }(fsURL);
+
+    //Computed observable to manage hiding and displaying list items and markers
     //http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
     this.filteredItems = ko.computed(function() {
         var filter = that.selectLoc().toLowerCase();
 
         if(!filter) {
-            //Initial placement of markers
-            that.placeMarkers();
-
-            //This was the only way I could figure out to set all the markers back
-            //to visible if the input box was cleared.
-            return ko.utils.arrayFilter(that.locList(), function(item) {
-                item.marker.setVisible(true);
-
-                //Return the filtered list to the DOM element that displays list items.
-                //return loc;
-                return that.locList();
-            });
-
+            //If there is no input in the filter then show all markers and list items.
+            that.showMarkers();
+            return that.locList();
         } else {
             return ko.utils.arrayFilter(that.locList(), function(item) {
                 //https://stackoverflow.com/questions/1789945/how-to-check-whether-a-string-contains-a-substring-in-javascript
@@ -160,8 +168,6 @@ function initMap() {
         styles: styles
     });
 
-    getLocations(fsURL);
-
     ko.applyBindings(new ViewModel());
 }
 
@@ -176,31 +182,6 @@ function populateInfoWindow(marker, infowindow) {
     }
 
 }
-
-//Call Foursquare API to get locations in a radius around a (currently) hard coded
-//set of coordinates.
-function getLocations(fsURL) {
-    $.getJSON(fsURL, function(data) {
-        var venues = data.response.venues;
-
-        //return venues;
-        for (var i = 0; i < venues.length; i++) {
-            var venue = {};
-
-            venue.title = venues[i].name;
-            venue.address = venues[i].location.address;
-            venue.lat = venues[i].location.lat;
-            venue.lng = venues[i].location.lng;
-            venue.location = {lat: venues[i].location.lat, lng: venues[i].location.lng};
-            venue.url = venues[i].url;
-
-            frogs.push(venue);
-        }
-    }).fail(function(err) {
-    window.alert('There was an error loading the locations from Foursquare. ' +
-        'Error message: ' + err.responseText);
-    })
-};
 
 function getPlacesDetail(marker, infowindow) {
     //TODO - Will use this to get additional info for
