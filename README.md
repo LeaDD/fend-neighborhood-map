@@ -4,6 +4,7 @@
 
 ***
 
+![alt text](https://github.com/LeaDD/fend-neighborhood-map/blob/master/neighborhood-map.jpg "The neighborhood map")
 
 #### Installation
 
