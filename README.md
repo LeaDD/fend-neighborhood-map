@@ -36,3 +36,14 @@ Technologies Used:
 When the site is initally opened it will display a large map with about three dozen markers placed. Selecting any marker will cause it to animate and an infowindow will open displaying additional information about the location. If the initial viewport size is greater than 992 pixels (desktop/laptop size) there will be a list of the marked locations as well as an input box to the left of the map. If the viewport is adjusted to below 992 pixels the select list and filter will slide off screen and a 'hamburger menu' will appear. Clicking the menu will cause the select list and input to slide back into view atop the map.
 
 Clicking on any of the list items will cause the corresponding marker to animate and the infowindow to open. Entering a string into the input will filter the list, and corresponding markers, to only return items which contain that string.
+
+#### Future
+
+1) Re-center on selected marker.
+2) Autocomplete filter input.
+3) Directions.
+4) Filter by business type.
+
+#### License
+
+Darth Midlo's Happy Habitat is released under the [MIT License](LICENSE.txt)
