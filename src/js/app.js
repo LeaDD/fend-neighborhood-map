@@ -6,9 +6,10 @@ var fsClient_Secret = 'DKCV4XJIO3O1ENQGIRCMTH3RRR4140FFGRNUC2H3RFETWZQ4';
 var midlo = {lat : 32.482361, lng : -96.99444889999999};
 var fsURL = 'https://api.foursquare.com/v2/venues/search?ll=' + midlo.lat.toString() +
     ',' + midlo.lng.toString() + '&radius=1000&client_id=' + fsClient_ID + '&client_secret=' +
-    fsClient_Secret + '&limit=35&categoryId=4d4b7104d754a06370d81259,4d4b7105d754a06372d81259,' +
+    fsClient_Secret + '&limit=35&categoryId=4d4b7104d754a06370d81259,' +
     '4d4b7105d754a06374d81259&v=20170723';
 var locations = [];
+var locDetails = {};
 
 var ViewModel = function() {
 
@@ -41,7 +42,7 @@ var ViewModel = function() {
             var marker = new google.maps.Marker({
                 position: position,
                 title: title,
-                //address: address,
+                address: location.address,
                 //icon: defaultIcon,
                 animation: google.maps.Animation.DROP
             });
@@ -54,6 +55,7 @@ var ViewModel = function() {
                 //https://coderwall.com/p/_ppzrw/be-careful-with-settimeout-in-loops
                 setDelay(this);
                 populateInfoWindow(this,that.myInfoWindow);
+                //getPlacesDetail(this, that.myInfoWindow);
             });
 
             that.markers.push(marker);
@@ -97,8 +99,6 @@ var ViewModel = function() {
         $.getJSON(fsURL, function(data) {
             var venues = data.response.venues;
 
-            console.log(venues);
-
             //return venues;
             for (var i = 0; i < venues.length; i++) {
                 var venue = {};
@@ -111,9 +111,11 @@ var ViewModel = function() {
                 venue.url = venues[i].url;
 
                 locations.push(venue);
-                console.log(venue);
             }
             that.placeMarkers();
+            //TESTING*************************************************************
+            //SEEING WHAT IS AVAILABLE FROM THE FOURSQUARE API CALL
+            console.log(data.response);
         }).fail(function(err) {
         window.alert('There was an error loading the locations from Foursquare. ' +
             'Error message: ' + err.responseText);
@@ -172,6 +174,10 @@ function initMap() {
 }
 
 function populateInfoWindow(marker, infowindow) {
+    //TESTING*************************************************************
+    getPlacesDetail(marker, infowindow);
+    //console.log(marker);
+
     if(infowindow.marker != marker) {
         infowindow.marker = marker;
         infowindow.setContent('<div>' + marker.title + '</div>');
@@ -180,14 +186,34 @@ function populateInfoWindow(marker, infowindow) {
             infowindow.setMarker = null;
         });
     }
-
 }
 
+//USE THIS TO GET PHOTOS AND BUSINESS HOURS (POSSIBLY MOVED INTO POPULATE
+//INFOWINDOW FUNCTION) OR USE A SUBSEQUENT CALL TO FOURSQUARE TO GET PHOTOS?
 function getPlacesDetail(marker, infowindow) {
     //TODO - Will use this to get additional info for
     //each marker at the time it is selected.
-    var service = new google.maps.PlacesService(map);
+    var bounds = map.getBounds();
 
+    console.log(marker);
+
+    var placesService = new google.maps.places.PlacesService(map);
+    placesService.textSearch({
+        query: marker.title,
+        bounds: bounds
+    }, function(results, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+            locDetails = results[0];
+            //console.log(locDetails);
+        }
+    });
+
+    //TESTING*************************************************************
+    //JUST TESTING TO MAKE SURE I CAN GET THE RIGHT INFO FROM GOOGLE PLACES
+    //console.log(locDetails);
+    setTimeout(function() {
+        console.log(locDetails)
+    }, 100);
 }
 
 //setTimeout to terminate bounce animation on markers
