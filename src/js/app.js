@@ -1,15 +1,15 @@
 //Variable to hold the map
 var map;
+var midlo = {lat : 32.482361, lng : -96.99444889999999};
+
 //Flickr API info
 var fsClient_ID = '1F5ZQMD1CLQPF4Q1M0MCR1E2DI5SD1PDLZNG2WYNA3PHQMY4';
 var fsClient_Secret = 'DKCV4XJIO3O1ENQGIRCMTH3RRR4140FFGRNUC2H3RFETWZQ4';
-var midlo = {lat : 32.482361, lng : -96.99444889999999};
 var fsURL = 'https://api.foursquare.com/v2/venues/search?ll=' + midlo.lat.toString() +
     ',' + midlo.lng.toString() + '&radius=1000&client_id=' + fsClient_ID + '&client_secret=' +
     fsClient_Secret + '&limit=35&categoryId=4d4b7104d754a06370d81259,' +
     '4d4b7105d754a06374d81259&v=20170723';
 var locations = [];
-var locDetails = {};
 
 var ViewModel = function() {
 
@@ -17,7 +17,7 @@ var ViewModel = function() {
     var that = this;
 
     this.myInfoWindow = new google.maps.InfoWindow({
-        maxWidth: 200
+        maxWidth: 250
     });
 
     //This will hold the objects in the locations array. The observable array will
