@@ -16,13 +16,13 @@ var ViewModel = function() {
     //Forces the content to stay within the viewmodel
     var that = this;
 
-    this.myInfoWindow = new google.maps.InfoWindow();
+    this.myInfoWindow = new google.maps.InfoWindow({
+        maxWidth: 200
+    });
 
     //This will hold the objects in the locations array. The observable array will
     //automatically update any bound DOM elements whenever the array changes.
     this.locList = ko.observableArray(locations);
-
-    //console.log(this.locList());
 
     //Array to hold location markers
     this.markers = ko.observableArray([]);
@@ -42,7 +42,11 @@ var ViewModel = function() {
             var marker = new google.maps.Marker({
                 position: position,
                 title: title,
-                address: location.address,
+                phone: location.phone,
+                address1: location.address1,
+                address2: location.address2,
+                url: location.url,
+                checkins: location.checkins,
                 //icon: defaultIcon,
                 animation: google.maps.Animation.DROP
             });
@@ -55,7 +59,6 @@ var ViewModel = function() {
                 //https://coderwall.com/p/_ppzrw/be-careful-with-settimeout-in-loops
                 setDelay(this);
                 populateInfoWindow(this,that.myInfoWindow);
-                //getPlacesDetail(this, that.myInfoWindow);
             });
 
             that.markers.push(marker);
@@ -104,18 +107,18 @@ var ViewModel = function() {
                 var venue = {};
 
                 venue.title = venues[i].name;
-                venue.address = venues[i].location.address;
+                venue.url = venues[i].url;
+                venue.address1 = venues[i].location.formattedAddress[0];
+                venue.address2 = venues[i].location.formattedAddress[1];
+                venue.checkins = venues[i].stats.checkinsCount;
+                venue.phone = venues[i].contact.formattedPhone;
                 venue.lat = venues[i].location.lat;
                 venue.lng = venues[i].location.lng;
                 venue.location = {lat: venues[i].location.lat, lng: venues[i].location.lng};
-                venue.url = venues[i].url;
 
                 locations.push(venue);
             }
             that.placeMarkers();
-            //TESTING*************************************************************
-            //SEEING WHAT IS AVAILABLE FROM THE FOURSQUARE API CALL
-            console.log(data.response);
         }).fail(function(err) {
         window.alert('There was an error loading the locations from Foursquare. ' +
             'Error message: ' + err.responseText);
@@ -173,47 +176,45 @@ function initMap() {
     ko.applyBindings(new ViewModel());
 }
 
+//Build out the infowindow with the various data fields from Foursquare.
 function populateInfoWindow(marker, infowindow) {
-    //TESTING*************************************************************
-    getPlacesDetail(marker, infowindow);
-    //console.log(marker);
-
     if(infowindow.marker != marker) {
         infowindow.marker = marker;
-        infowindow.setContent('<div>' + marker.title + '</div>');
+
+        var innerHTML = '<div>';
+
+        if (marker.title) {
+            innerHTML += '<strong>' + marker.title + '</strong>';
+        }
+
+        if (marker.address1) {
+            innerHTML += '<br>' + marker.address1;
+        }
+
+        if (marker.address2) {
+            innerHTML += '<br>' + marker.address2;
+        }
+
+        if (marker.phone) {
+            innerHTML += '<br>' + marker.phone;
+        }
+
+        if (marker.url) {
+            innerHTML += '<br>' + marker.url;
+        }
+
+        if (marker.checkins) {
+            innerHTML += '<hr><strong>FourSquare Checkins: </strong>' + marker.checkins;
+        }
+
+        innerHTML += '</div>';
+
+        infowindow.setContent(innerHTML);
         infowindow.open(map, marker);
         infowindow.addListener('closeclick', function() {
-            infowindow.setMarker = null;
+        infowindow.setMarker = null;
         });
     }
-}
-
-//USE THIS TO GET PHOTOS AND BUSINESS HOURS (POSSIBLY MOVED INTO POPULATE
-//INFOWINDOW FUNCTION) OR USE A SUBSEQUENT CALL TO FOURSQUARE TO GET PHOTOS?
-function getPlacesDetail(marker, infowindow) {
-    //TODO - Will use this to get additional info for
-    //each marker at the time it is selected.
-    var bounds = map.getBounds();
-
-    console.log(marker);
-
-    var placesService = new google.maps.places.PlacesService(map);
-    placesService.textSearch({
-        query: marker.title,
-        bounds: bounds
-    }, function(results, status) {
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-            locDetails = results[0];
-            //console.log(locDetails);
-        }
-    });
-
-    //TESTING*************************************************************
-    //JUST TESTING TO MAKE SURE I CAN GET THE RIGHT INFO FROM GOOGLE PLACES
-    //console.log(locDetails);
-    setTimeout(function() {
-        console.log(locDetails)
-    }, 100);
 }
 
 //setTimeout to terminate bounce animation on markers
