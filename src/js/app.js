@@ -9,6 +9,8 @@ var fsURL = 'https://api.foursquare.com/v2/venues/search?ll=' + midlo.lat.toStri
     ',' + midlo.lng.toString() + '&radius=1000&client_id=' + fsClient_ID + '&client_secret=' +
     fsClient_Secret + '&limit=35&categoryId=4d4b7104d754a06370d81259,' +
     '4d4b7105d754a06374d81259&v=20170723';
+
+//Variable to hold the Foursquare venues that we will get from an API call.
 var locations = [];
 
 var ViewModel = function() {
@@ -34,20 +36,16 @@ var ViewModel = function() {
     this.createMarkers = function() {
         this.locList().forEach(function(location) {
 
-            //Get position and title from the locList array
-            var position = location.location;
-            var title = location.title;
-
-            //Create the markers
+            //Create the markers and give each properties from the corresponding
+            //Foursquare venue.
             var marker = new google.maps.Marker({
-                position: position,
-                title: title,
+                position: location.position,
+                title: location.title,
                 phone: location.phone,
                 address1: location.address1,
                 address2: location.address2,
                 url: location.url,
                 checkins: location.checkins,
-                //icon: defaultIcon,
                 animation: google.maps.Animation.DROP
             });
 
@@ -82,7 +80,7 @@ var ViewModel = function() {
         map.fitBounds(bounds);
     };
 
-    //Hide markers
+    //Show markers
     this.showMarkers = function() {
         for (var i = 0; i < that.markers().length; i++) {
             that.markers()[i].setVisible(true);
@@ -167,7 +165,7 @@ function initMap() {
     var styles = [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"color":"#000000"},{"lightness":13}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#144b53"},{"lightness":14},{"weight":1.4}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#08304b"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#0c4152"},{"lightness":5}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#0b434f"},{"lightness":25}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.arterial","elementType":"geometry.stroke","stylers":[{"color":"#0b3d51"},{"lightness":16}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#000000"}]},{"featureType":"transit","elementType":"all","stylers":[{"color":"#146474"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#021019"}]}];
 
     map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 32.482361, lng: -96.994448899999},
+        center: midlo,
         zoom: 13,
         mapTypeControl: true,
         styles: styles
@@ -234,6 +232,7 @@ $('.hamburger').click(function () {
     $('#select-box').toggle('slide');
 });
 
+//Handle screen resizing
 //https://stackoverflow.com/questions/18873425/slidetoggle-not-displaying-div-when-screen-size-returns-to-bigger-size
 $(window).resize(function() {
     var width = $(window).width();
