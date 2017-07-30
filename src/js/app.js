@@ -39,7 +39,7 @@ var ViewModel = function() {
             //Create the markers and give each properties from the corresponding
             //Foursquare venue.
             var marker = new google.maps.Marker({
-                position: location.position,
+                position: location.location,
                 title: location.title,
                 phone: location.phone,
                 address1: location.address1,
@@ -165,7 +165,7 @@ function initMap() {
     var styles = [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"color":"#000000"},{"lightness":13}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#144b53"},{"lightness":14},{"weight":1.4}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#08304b"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#0c4152"},{"lightness":5}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#0b434f"},{"lightness":25}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.arterial","elementType":"geometry.stroke","stylers":[{"color":"#0b3d51"},{"lightness":16}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#000000"}]},{"featureType":"transit","elementType":"all","stylers":[{"color":"#146474"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#021019"}]}];
 
     map = new google.maps.Map(document.getElementById('map'), {
-        center: midlo,
+        center: {lat : 32.482361, lng : -96.99444889999999},
         zoom: 13,
         mapTypeControl: true,
         styles: styles
@@ -179,10 +179,12 @@ function populateInfoWindow(marker, infowindow) {
     if(infowindow.marker != marker) {
         infowindow.marker = marker;
 
-        var innerHTML = '<div>';
+        //Style the infowindow
+        //https://codepen.io/Marnoto/pen/xboPmG
+        var innerHTML = '<div id="iw-container"><div class="iw-title">';
 
         if (marker.title) {
-            innerHTML += '<strong>' + marker.title + '</strong>';
+            innerHTML += marker.title + '</div>';
         }
 
         if (marker.address1) {
@@ -194,11 +196,11 @@ function populateInfoWindow(marker, infowindow) {
         }
 
         if (marker.phone) {
-            innerHTML += '<br>' + marker.phone;
+            innerHTML += '<br><strong>' + marker.phone + '</strong>';
         }
 
         if (marker.url) {
-            innerHTML += '<br>' + marker.url;
+            innerHTML += '<br>Site: ' + marker.url;
         }
 
         if (marker.checkins) {

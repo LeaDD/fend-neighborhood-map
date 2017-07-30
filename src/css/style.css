@@ -1,0 +1,136 @@
+/*Default styles will be for small mobile devices*/
+            * {
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                -ms-box-sizing: border-box;
+                box-sizing: border-box;
+            }
+
+            body {
+                background-size: 100%;
+                background-color: gainsboro;
+            }
+
+            html, body, .container-fluid {
+                height: 100%;
+            }
+
+            img, embed, object, video {
+                max-width: 100%;
+            }
+
+            ul {
+                list-style: none;
+            }
+
+            /*Page level row elements*/
+            #banner {
+                height: 7%;
+                text-align: right;
+                text-shadow: 4px 4px 2px rgba(150, 150, 150, 1);
+                color: darkslateblue;
+            }
+
+            #map-block {
+                height: 93%;
+                bottom: 0px;
+                margin-bottom: 0px;
+            }
+
+            /*map-block columns*/
+            #select-box {
+                height: 40%;
+            }
+
+            #map {
+                height: 100%;
+            }
+
+
+            /*select-box elements*/
+            #list-box {
+                height: 50%;
+                overflow-y: auto;
+            }
+
+            .list-head {
+                text-align: center;
+            }
+
+            #search-box {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            /*Hamburger menu stuff*/
+            /*https://codepen.io/g13nn/pen/eHGEF*/
+            .hamburger{
+              background:none;
+              top:20px;
+              left:20px;
+              line-height:45px;
+              padding:5px 15px 0px 15px;
+              color:darkslateblue;
+              border:0;
+              font-size:2.2em;
+              font-weight:bold;
+              cursor:pointer;
+              outline:none;
+              z-index:99;
+            }
+
+
+            /*Style the infowindow*/
+            /*https://codepen.io/Marnoto/pen/xboPmG*/
+            #iw-container {
+                margin-bottom: 10px;
+            }
+
+            #iw-container .iw-title {
+                font-family: 'Open Sans Condensed', sans-serif;
+                font-size: 22px;
+                font-weight: 400;
+                padding: 10px;
+                background-color: #48b5e9;
+                color: white;
+                margin: 0;
+                border-radius: 2px 2px 0 0;
+            }
+
+            .resp-btn {
+                padding-top: 15px;
+                padding-left: 30px;
+                text-align: left;
+            }
+
+            /*Tablet viewports*/
+            @media (min-width: 768px) and (max-width: 1023px) {
+                #select-box {
+                    height: 40%;
+                }
+
+                #list-box {
+                    height: 70%;
+                    overflow-y: auto;
+                }
+            }
+
+            /*Laptop and Desktop viewports*/
+            @media (min-width: 1024px) {
+                #select-box {
+                    height: 87%;
+                }
+
+                #list-box {
+                    height: 100%;
+                    overflow-y: auto;
+                }
+            }
+
+            /*Mobile size*/
+            /*Hide the select box if the view port begins or is resized to < 992px*/
+            @media (max-width: 992px) {
+                #select-box {
+                    display: none;
+                }
+            }

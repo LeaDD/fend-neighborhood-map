@@ -38,12 +38,20 @@ module.exports = function(grunt) {
                     'dist/index.html': 'src/index.html'
                 }
             }
+        },
+        cssmin: {
+            target: {
+                files: {
+                    'dist/css/style.css': 'src/css/style.css'
+                }
+            }
         }
     });
 
     grunt.registerTask('default',
         ['jshint',
         'uglify',
-        'htmlmin'
+        'htmlmin',
+        'cssmin'
         ]);
 };
