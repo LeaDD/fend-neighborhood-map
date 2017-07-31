@@ -18,6 +18,18 @@ $ xdg-open index.html
 
 Or you can access on the web @ [https://leadd.github.io/fend-neighborhood-map/dist/index.html](https://leadd.github.io/fend-neighborhood-map/dist/index.html).
 
+To build from source you must first install the Grunt task runner. If you do not already have a global install you see [Grunt's homepage](https://gruntjs.com/) for reference. You will then need to install the htmlmin, cssmin, uglify and jshint plugins.
+
+```
+$ npm install grunt-contrib-jshint --save-dev
+```
+
+Again, see the Grunt main and plugin pages for further details. Once Grunt and the appropriate plugins are installed execute the *grunt* command from anywhere in the directory.
+
+```
+$ grunt
+```
+
 #### About
 
 This project is meant to incorporate the use of one or more third party JavaScript libraries as well as content from one or more APIs into a neighborhood map displayed in Google Maps. For my submission I chose to get 'venues' from a small town in North Texas, which just happens to be home to the much loved Darth Midlo.
@@ -39,10 +51,9 @@ Clicking on any of the list items will cause the corresponding marker to animate
 
 #### Future
 
-1) Re-center on selected marker.
-2) Autocomplete filter input.
-3) Directions.
-4) Filter by business type.
+1) Autocomplete filter input.
+2) Directions.
+3) Filter by business type.
 
 #### License
 

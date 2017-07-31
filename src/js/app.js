@@ -18,6 +18,9 @@ var ViewModel = function() {
     //Forces the content to stay within the viewmodel
     var that = this;
 
+    //LatLng object which defines the area needed to contain the markers.
+    var bounds = new google.maps.LatLngBounds();
+
     this.myInfoWindow = new google.maps.InfoWindow({
         maxWidth: 250
     });
@@ -57,6 +60,9 @@ var ViewModel = function() {
                 //https://coderwall.com/p/_ppzrw/be-careful-with-settimeout-in-loops
                 setDelay(this);
                 populateInfoWindow(this,that.myInfoWindow);
+                //Re-center the map on the selected marker.
+                //REVIEWER SUGGESTION - THANK YOU!!!
+                map.panTo(this.getPosition());
             });
 
             that.markers.push(marker);
@@ -68,8 +74,6 @@ var ViewModel = function() {
 
     //Initial placement of markers
     this.placeMarkers = function() {
-        var bounds = new google.maps.LatLngBounds();
-
         that.createMarkers();
 
         for (var i = 0; i < that.markers().length; i++) {
@@ -156,6 +160,13 @@ var ViewModel = function() {
         setDelay(item.marker);
         populateInfoWindow(item.marker,that.myInfoWindow);
     };
+
+    //Resize to display all markers if user changes viewport size.
+    //REVIEWER SUGGESTION - THANK YOU!!!
+    google.maps.event.addDomListener(window, 'resize', function() {
+        map.fitBounds(bounds);
+    });
+
 
 };
 

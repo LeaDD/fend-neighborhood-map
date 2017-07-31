@@ -39,6 +39,7 @@ module.exports = function(grunt) {
                 }
             }
         },
+        //Minify CSS
         cssmin: {
             target: {
                 files: {
