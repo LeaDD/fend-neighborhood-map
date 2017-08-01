@@ -108,12 +108,14 @@ var ViewModel = function() {
             for (var i = 0; i < venues.length; i++) {
                 var venue = {};
 
+                //Provide default values after || in case no data returned for each data point
+                //REVIEWER SUGGESTION - THANK YOU!!!
                 venue.title = venues[i].name;
-                venue.url = venues[i].url;
-                venue.address1 = venues[i].location.formattedAddress[0];
+                venue.url = venues[i].url || 'No URL provided';
+                venue.address1 = venues[i].location.formattedAddress[0] || 'No address provided';
                 venue.address2 = venues[i].location.formattedAddress[1];
-                venue.checkins = venues[i].stats.checkinsCount;
-                venue.phone = venues[i].contact.formattedPhone;
+                venue.checkins = venues[i].stats.checkinsCount || 'No checkin data';
+                venue.phone = venues[i].contact.formattedPhone || 'No phone provided';
                 venue.lat = venues[i].location.lat;
                 venue.lng = venues[i].location.lng;
                 venue.location = {lat: venues[i].location.lat, lng: venues[i].location.lng};
@@ -159,6 +161,17 @@ var ViewModel = function() {
         item.marker.setAnimation(google.maps.Animation.BOUNCE);
         setDelay(item.marker);
         populateInfoWindow(item.marker,that.myInfoWindow);
+    };
+
+    //Toggle slide the select list if hamburger button is clicked.
+    //https://codepen.io/g13nn/pen/eHGEF
+    //https://codepen.io/e-river/pen/EGIbe
+    //REVIEWER SUGGESTION - THANK YOU!!! - The full suggestion was to use the click and CSS
+    //bindings to achieve this effect. I have implemented the click binding but not sure what
+    //was meant by using CSS binding. The sample codepen provided by the reviewer shows how to
+    //hide/display, but I wanted to use the slide transition.
+    this.toggleSlide = function() {
+        $('#select-box').toggle('slide');
     };
 
     //Resize to display all markers if user changes viewport size.
@@ -238,12 +251,6 @@ function setDelay(marker) {
 function mapLoadError() {
     window.alert('Google maps failed to load. Please check your connection or try again later.');
 }
-
-//Toggle slide the select list if hamburger button is clicked.
-/*https://codepen.io/g13nn/pen/eHGEF*/
-$('.hamburger').click(function () {
-    $('#select-box').toggle('slide');
-});
 
 //Handle screen resizing
 //https://stackoverflow.com/questions/18873425/slidetoggle-not-displaying-div-when-screen-size-returns-to-bigger-size

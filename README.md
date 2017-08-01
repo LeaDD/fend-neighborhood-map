@@ -18,10 +18,13 @@ $ xdg-open index.html
 
 Or you can access on the web @ [https://leadd.github.io/fend-neighborhood-map/dist/index.html](https://leadd.github.io/fend-neighborhood-map/dist/index.html).
 
-To build from source you must first install the Grunt task runner. If you do not already have a global install you see [Grunt's homepage](https://gruntjs.com/) for reference. You will then need to install the htmlmin, cssmin, uglify and jshint plugins.
+To build from source you must first install the Grunt task runner. If you do not already have a global install see [Grunt's homepage](https://gruntjs.com/) for reference. You will then need to install the htmlmin, cssmin, uglify and jshint plugins.
 
 ```
 $ npm install grunt-contrib-jshint --save-dev
+$ npm install grunt-contrib-cssmin --save-dev
+$ npm install grunt-contrib-htmlmin --save-dev
+$ npm install grunt-contrib-uglify --save-dev
 ```
 
 Again, see the Grunt main and plugin pages for further details. Once Grunt and the appropriate plugins are installed execute the *grunt* command from anywhere in the directory.

@@ -32,7 +32,7 @@
             }
 
             #map-block {
-                height: 93%;
+                height: 92%;
                 bottom: 0px;
                 margin-bottom: 0px;
             }
@@ -40,6 +40,7 @@
             /*map-block columns*/
             #select-box {
                 height: 40%;
+                cursor: pointer;
             }
 
             #map {
@@ -101,6 +102,17 @@
                 padding-top: 15px;
                 padding-left: 30px;
                 text-align: left;
+            }
+
+            /*Have to modify just the map block height at small screen sizes*/
+            /*because the banner text stacks below about 580px and causes*/
+            /*vertical scroll*/
+            @media (max-width: 580px) and (max-height: 736px) {
+                #map-block {
+                height: 81%;
+                bottom: 0px;
+                margin-bottom: 0px;
+                }
             }
 
             /*Tablet viewports*/
