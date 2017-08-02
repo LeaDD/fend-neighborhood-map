@@ -183,17 +183,31 @@ var ViewModel = function() {
 
 };
 
+//Dynamically size the vertical elements in order to eliminate vertical scrolling
+function vertSize() {
+    //Get the vertical dimentsions of the viewport and the banner element
+    var vpHeight = $(window).height();
+    var titleHeight = $('.title').height();
+    var mapBlockHeight = vpHeight - titleHeight;
+
+    //Dynamically resize the map block based on the height of the banner element
+    $('#map-block').height(mapBlockHeight);
+}
+
 function initMap() {
     //Style the map
     //https://snazzymaps.com/style/2/midnight-commander
     var styles = [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"color":"#000000"},{"lightness":13}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#144b53"},{"lightness":14},{"weight":1.4}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#08304b"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#0c4152"},{"lightness":5}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#0b434f"},{"lightness":25}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.arterial","elementType":"geometry.stroke","stylers":[{"color":"#0b3d51"},{"lightness":16}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#000000"}]},{"featureType":"transit","elementType":"all","stylers":[{"color":"#146474"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#021019"}]}];
 
     map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat : 32.482361, lng : -96.99444889999999},
+        center: midlo,
         zoom: 13,
         mapTypeControl: true,
         styles: styles
     });
+
+    //Initialize vertical elements based on viewport dimensions
+    vertSize();
 
     ko.applyBindings(new ViewModel());
 }
@@ -257,6 +271,8 @@ function mapLoadError() {
 $(window).resize(function() {
     var width = $(window).width();
 
+    vertSize();
+
     //If the select list has been toggled off and the screen is returned to > 992px
     //, toggle back on.
     if (width > 992 && $('#select-box').is(':hidden')) {
@@ -267,4 +283,6 @@ $(window).resize(function() {
     if (width < 992 && $('#select-box').is(':visible')) {
         $('#select-box').hide();
     }
+
+
 });
